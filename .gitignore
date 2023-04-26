@@ -18,3 +18,5 @@ bin-release/
 # information for Eclipse / Flash Builder.
 
 /.idea
+**/*.htaccess
+server/public/.htaccess
