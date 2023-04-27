@@ -1,7 +1,7 @@
 <template>
     <el-date-picker
         v-model="content"
-        type="datetimerange"
+        :type="dateRange ?? 'datetimerange'"
         range-separator="-"
         start-placeholder="开始时间"
         end-placeholder="结束时间"
@@ -19,11 +19,13 @@ const props = withDefaults(
         startTime?: string
         endTime?: string
         valueFormat?: string
+        dateRange?: 'datetimerange' | 'daterange'
     }>(),
     {
         startTime: '',
         endTime: '',
-        valueFormat: 'YYYY-MM-DD HH:mm:ss'
+        valueFormat: 'YYYY-MM-DD HH:mm:ss',
+        dateRange: 'datetimerange'
     }
 )
 const emit = defineEmits(['update:startTime', 'update:endTime'])
