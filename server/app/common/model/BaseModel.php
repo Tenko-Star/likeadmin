@@ -47,4 +47,36 @@ class BaseModel extends Model
     {
         return trim($value) ? FileService::setFileUrl($value) : '';
     }
+
+    /**
+     * 批量补全图片路径
+     *
+     * @param $value
+     * @return array
+     * @author Tenko_
+     */
+    public function getImagesAttr($value): array
+    {
+        if (!is_string($value) || empty($value)) {
+            return [];
+        }
+
+        return array_map(fn($item) => FileService::getFileUrl($item), explode(',', $value));
+    }
+
+    /**
+     * 批量移除图片路径
+     *
+     * @param $value
+     * @return string
+     * @author Tenko_
+     */
+    public function setImagesAttr($value): string
+    {
+        if (!is_array($value) || empty($value)) {
+            return '';
+        }
+
+        return implode(',', array_map(fn($item) => FileService::setFileUrl($item), $value));
+    }
 }
