@@ -22,10 +22,12 @@
 type KeywordType = string | number | string[] | number[]
 type InjectProps = Record<string, any>
 type SearchProps = InjectProps & { [key: string]: KeywordType }
+type Constructor = (new (...args: any[]) => any) & ((...args: any[]) => any)
 
 interface Props {
     modelValue: KeywordType
     optionKey?: string
+    optionType?: Constructor
     keyword?: string
     multiple?: boolean
     disable?: boolean
@@ -35,17 +37,20 @@ interface Props {
     injectProps?: InjectProps
     max?: number
     placeholder?: string
+    preSearch?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
     optionKey: 'id',
+    optionType: Number,
     keyword: 'keyword',
     multiple: false,
     disable: false,
     size: 'default',
     max: 100,
     injectProps: () => ({}),
-    placeholder: '请选择'
+    placeholder: '请选择',
+    preSearch: true
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -74,6 +79,24 @@ const loadSelect = async (k: string) => {
     const res = await props.fetchFun(data)
     lists.value = res.lists.slice(0, Math.min(props.max, 100))
 }
+
+const preSelect = async () => {
+    if (!props.modelValue) {
+        return
+    }
+
+    const data: SearchProps = { ...inject.value, [props.optionKey]: props.modelValue }
+    const res = await props.fetchFun(data)
+
+    res.lists.forEach((item: any) => {
+        item[props.optionKey] = props.optionType(item[props.optionKey])
+    })
+    lists.value = res.lists.slice(0, Math.min(props.max, 100))
+}
+
+onMounted(() => {
+    preSelect()
+})
 </script>
 
 <style scoped></style>
