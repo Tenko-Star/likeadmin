@@ -1,19 +1,20 @@
 <template>
     <el-select
-            :multiple="multiple ?? false"
-            :disable="disable"
-            :size="size ?? 'default'"
-            filterable
-            remote
-            v-model="value"
-            :remote-method="loadSelect"
-            :placeholder="placeholder!"
+        :multiple="multiple ?? false"
+        :disable="disable"
+        :size="size ?? 'default'"
+        filterable
+        remote
+        v-model="value"
+        :remote-method="loadSelect"
+        :placeholder="placeholder!"
+        class="w-[280px]"
     >
         <el-option
-                v-for="item in lists"
-                :key="item[optionKey]"
-                :label="parseLabel(item)"
-                :value="item[optionKey]"
+            v-for="item in lists"
+            :key="item[optionKey]"
+            :label="parseLabel(item)"
+            :value="item[optionKey]"
         />
     </el-select>
 </template>
@@ -77,14 +78,14 @@ const parseLabel = (item: any) => {
 const loadSelect = async (k: string) => {
     const data: SearchProps = { ...inject.value, [props.keyword]: k }
     const res = await props.fetchFun(data)
+
+    res.lists.forEach((item: any) => {
+        item[props.optionKey] = props.optionType(item[props.optionKey])
+    })
     lists.value = res.lists.slice(0, Math.min(props.max, 100))
 }
 
 const preSelect = async () => {
-    if (!props.modelValue) {
-        return
-    }
-
     const data: SearchProps = { ...inject.value, [props.optionKey]: props.modelValue }
     const res = await props.fetchFun(data)
 
@@ -95,7 +96,9 @@ const preSelect = async () => {
 }
 
 onMounted(() => {
-    preSelect()
+    if (props.preSearch && !!props.modelValue) {
+        preSelect()
+    }
 })
 </script>
 
