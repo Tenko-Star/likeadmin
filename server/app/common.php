@@ -296,3 +296,8 @@ function format_amount($float)
     }
     return $float;
 }
+
+function get_date_start(DateTimeImmutable $date): int
+{
+    return $date->setTime(0, 0)->getTimestamp();
+}
