@@ -301,3 +301,30 @@ function get_date_start(DateTimeImmutable $date): int
 {
     return $date->setTime(0, 0)->getTimestamp();
 }
+
+if (!function_exists('array_flat')) {
+    function array_flat(array $data, string $separator = '.', string $key = ''): array
+    {
+        $result = [];
+
+        foreach ($data as $name => $datum) {
+            $cur = $key . $separator . $name;
+
+            if (is_array($datum)) {
+                $result = array_merge($result, array_flat($datum, $separator, ltrim($cur, $separator)));
+                continue;
+            }
+
+            if (empty($key)) {
+                $result[$name] = $datum;
+                continue;
+            }
+
+            $result[$cur] = $datum;
+        }
+
+        return $result;
+    }
+} else {
+    throw new \Exception('Function conflict [array_flat]');
+}
