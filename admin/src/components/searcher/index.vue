@@ -4,7 +4,7 @@
         :disable="disable"
         :size="size ?? 'default'"
         filterable
-        remote
+        :remote="searchable ?? true"
         :clearable="clearable ?? true"
         v-model="value"
         :remote-method="loadSelect"
@@ -45,6 +45,7 @@ interface Props {
     preSearch?: boolean
     clearable?: boolean
     emptyValue?: any
+    searchable?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -59,7 +60,8 @@ const props = withDefaults(defineProps<Props>(), {
     placeholder: '请选择',
     preSearch: true,
     clearable: true,
-    emptyValue: null
+    emptyValue: null,
+    searchable: true
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -96,7 +98,14 @@ const loadSelect = async (k: string) => {
 }
 
 const preSelect = async () => {
-    const data: SearchProps = { ...inject.value, [props.optionKey]: props.modelValue }
+    let data: SearchProps
+
+    if (props.searchable) {
+        data = { ...inject.value, [props.optionKey]: props.modelValue }
+    } else {
+        data = { ...inject.value }
+    }
+
     const res = await props.fetchFun(data)
 
     res.lists.forEach((item: any) => {
