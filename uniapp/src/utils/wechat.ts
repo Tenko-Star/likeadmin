@@ -1,7 +1,80 @@
+// @ts-nocheck
+
 import weixin from 'weixin-js-sdk'
 import { getWxCodeUrl, OALogin } from '@/api/account'
 import { isAndroid } from './client'
 import { wxJsConfig } from '@/api/app'
+
+const checkMnpUpdate = async () => {
+    if (typeof wx !== 'object') {
+        return
+    }
+
+    if (wx.canIUse('getUpdateManager')) {
+        const updateManager = wx.getUpdateManager()
+
+        const needUpdate = await new Promise<boolean>((resolve) => {
+            updateManager.onCheckForUpdate((res: { hasUpdate: boolean }) => {
+                resolve(res.hasUpdate)
+            })
+        })
+
+        if (needUpdate) {
+            try {
+                await new Promise<void>((resolve, reject) => {
+                    updateManager.onUpdateReady(() => {
+                        resolve()
+                    })
+
+                    updateManager.onUpdateFailed(() => {
+                        reject()
+                    })
+                })
+            } catch (e) {
+                wx.showModal({
+                    title: '已经有新版本了哟',
+                    content: '新版本已经上线啦，请您删除当前小程序，重新搜索打开哟'
+                })
+                return
+            }
+
+            const isClickConfirm = await new Promise<boolean>((resolve) => {
+                wx.showModal({
+                    title: '更新提示',
+                    content: '新版本已经准备好，是否重启应用？',
+                    success: (res: { confirm: boolean }) => {
+                        resolve(res.confirm)
+                    }
+                })
+            })
+
+            if (isClickConfirm) {
+                updateManager.applyUpdate()
+            } else {
+                const isSecondClick = await new Promise<boolean>((resolve) => {
+                    wx.showModal({
+                        title: '温馨提示',
+                        content: '本次版本更新涉及到新的功能添加，旧版本无法正常访问的哦',
+                        success: (res: { confirm: boolean }) => {
+                            resolve(res.confirm)
+                        }
+                    })
+                })
+
+                if (isSecondClick) {
+                    updateManager.applyUpdate()
+                } else {
+                    checkMnpUpdate()
+                }
+            }
+        }
+    } else {
+        wx.showModal({
+            title: '提示',
+            content: '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。'
+        })
+    }
+}
 
 const wechatOa = {
     getSignLink() {
@@ -134,7 +207,8 @@ const wechatOa = {
                 })
             })
         })
-    }
+    },
+    checkMnpUpdate
 }
 
 export default wechatOa
