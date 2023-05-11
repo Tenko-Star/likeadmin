@@ -125,6 +125,12 @@ watch([value], () => {
         preSelect()
     }
 })
+
+onMounted(() => {
+    if (!props.searchable) {
+        preSelect()
+    }
+})
 </script>
 
 <style scoped></style>
