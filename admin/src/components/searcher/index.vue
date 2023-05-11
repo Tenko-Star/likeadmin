@@ -5,10 +5,12 @@
         :size="size ?? 'default'"
         filterable
         remote
+        :clearable="clearable ?? true"
         v-model="value"
         :remote-method="loadSelect"
         :placeholder="placeholder!"
         class="w-[280px]"
+        @clear="handleClear"
     >
         <el-option
             v-for="item in lists"
@@ -20,6 +22,8 @@
 </template>
 
 <script setup lang="ts" name="BaseSearcher">
+import { watch, computed, ref, onMounted } from 'vue'
+
 type KeywordType = string | number | string[] | number[]
 type InjectProps = Record<string, any>
 type SearchProps = InjectProps & { [key: string]: KeywordType }
@@ -39,6 +43,8 @@ interface Props {
     max?: number
     placeholder?: string
     preSearch?: boolean
+    clearable?: boolean
+    emptyValue?: any
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -51,7 +57,9 @@ const props = withDefaults(defineProps<Props>(), {
     max: 100,
     injectProps: () => ({}),
     placeholder: '请选择',
-    preSearch: true
+    preSearch: true,
+    clearable: true,
+    emptyValue: null
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -80,7 +88,9 @@ const loadSelect = async (k: string) => {
     const res = await props.fetchFun(data)
 
     res.lists.forEach((item: any) => {
-        item[props.optionKey] = props.optionType(item[props.optionKey])
+        item[props.optionKey] = props.optionType
+            ? props.optionType(item[props.optionKey])
+            : item[props.optionKey]
     })
     lists.value = res.lists.slice(0, Math.min(props.max, 100))
 }
@@ -90,13 +100,19 @@ const preSelect = async () => {
     const res = await props.fetchFun(data)
 
     res.lists.forEach((item: any) => {
-        item[props.optionKey] = props.optionType(item[props.optionKey])
+        item[props.optionKey] = props.optionType
+            ? props.optionType(item[props.optionKey])
+            : item[props.optionKey]
     })
     lists.value = res.lists.slice(0, Math.min(props.max, 100))
 }
 
-onMounted(() => {
-    if (props.preSearch && !!props.modelValue) {
+const handleClear = () => {
+    value.value = props.emptyValue
+}
+
+watch([value], () => {
+    if (props.preSearch) {
         preSelect()
     }
 })
