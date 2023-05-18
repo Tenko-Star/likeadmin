@@ -34,9 +34,7 @@ class NotifyController extends BaseAdminController
     public function ping()
     {
         $params = (new NotifyValidate())->post()->goCheck();
-        AdminMessageService::sendToClientFromSystem($params['client_id'], 'pong', [
-            'timestamp' => time()
-        ]);
+        AdminMessageService::sendToClientFromSystem($params['client_id'], 'pong');
 
         return $this->success();
     }
