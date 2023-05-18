@@ -2,7 +2,7 @@ import type { IsSameTo } from '@/utils/types'
 
 interface SystemData {
     timestamp: number
-    data: Record<string, any> | null
+    [key: string]: any
 }
 
 interface UserData {
@@ -12,7 +12,7 @@ interface UserData {
         nickname: string
         avatar: number
     }
-    data: Record<string, any> | null
+    [key: string]: any
 }
 
 export interface DataType {

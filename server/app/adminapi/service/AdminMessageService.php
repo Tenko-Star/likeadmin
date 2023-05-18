@@ -44,12 +44,12 @@ class AdminMessageService
      * @param array|null $data
      * @return void
      */
-    public static function sendToClientFromSystem(string $clientId, string $msg, ?array $data = null): void
+    public static function sendToClientFromSystem(string $clientId, string $msg, array $data = []): void
     {
         $ms = new MessageService();
         $data = [
             'timestamp' => time(),
-            'data' => $data
+            ...$data
         ];
         $message = ClientMessage::data($data, $msg);
         $message->setClientId($clientId);
@@ -65,12 +65,12 @@ class AdminMessageService
      * @param array|null $data
      * @return void
      */
-    public static function sendToUserFromSystem(int $userId, string $msg, ?array $data = null): void
+    public static function sendToUserFromSystem(int $userId, string $msg, array $data = []): void
     {
         $ms = new MessageService();
         $data = [
             'timestamp' => time(),
-            'data' => $data
+            ...$data
         ];
         $message = UidMessage::data($data, $msg);
         $message->setUid($userId);
@@ -88,13 +88,13 @@ class AdminMessageService
      * @return void
      * @throws \Exception
      */
-    public static function sendToUserFromUser(int $target, Admin $source, string $msg, ?array $data = null): void
+    public static function sendToUserFromUser(int $target, Admin $source, string $msg, array $data = []): void
     {
         $ms = new MessageService();
         $data = [
             'timestamp' => time(),
             'source' => $source->toSource(),
-            'data' => $data
+            ...$data
         ];
         $message = UidMessage::data($data, $msg, 'user');
         $message->setUid($target);
