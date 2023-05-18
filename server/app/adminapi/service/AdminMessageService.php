@@ -65,7 +65,7 @@ class AdminMessageService
      * @param array|null $data
      * @return void
      */
-    public static function sendToAdminFromSystem(int $userId, string $msg, ?array $data = null): void
+    public static function sendToUserFromSystem(int $userId, string $msg, ?array $data = null): void
     {
         $ms = new MessageService();
         $data = [
@@ -88,7 +88,7 @@ class AdminMessageService
      * @return void
      * @throws \Exception
      */
-    public static function sendToAdminFromAdmin(int $target, Admin $source, string $msg, ?array $data = null): void
+    public static function sendToUserFromUser(int $target, Admin $source, string $msg, ?array $data = null): void
     {
         $ms = new MessageService();
         $data = [
