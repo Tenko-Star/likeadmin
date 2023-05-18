@@ -9,5 +9,7 @@ return [
         'crontab' => 'app\common\command\Crontab',
         // 退款查询
         'query_refund' => 'app\common\command\QueryRefund',
+        // 注册信息服务
+        'message:register' => 'app\common\command\MessageRegister'
     ],
 ];

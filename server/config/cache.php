@@ -29,9 +29,11 @@ return [
             // 驱动方式
             'type'   => 'redis',
             // 服务器地址
-            'host'   => env('cache.host','like-redis'),
+            'host'   => env('cache.host','127.0.0.1'),
             //端口
             'port'   => env('cache.port','6379'),
+            // 前缀
+            'prefix' => env('cache.prefix', '')
         ],
     ],
 ];
