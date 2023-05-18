@@ -216,11 +216,10 @@ const getData = () => {
 }
 
 const removeListener = useNotify((data) => {
-    if (data.sendUserId === 'system') {
+    if (data.sendUserId === 'system' && data.msg === 'pong') {
         const msg = data as WebsocketData<SystemType>
         ElNotification({
-            title: '收到一条新信息',
-            message: msg.msg
+            title: 'PONG'
         })
     }
 })

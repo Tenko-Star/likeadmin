@@ -3,7 +3,8 @@ import { parseData } from '@/utils/websocket/ws'
 import { heartbeat, login } from '@/api/notify'
 import { ElNotification } from 'element-plus'
 
-const initFlag = false
+let initFlag = false
+let attempt = 1
 
 export type NotifyHandler = (data: CommonWebsocketData) => void
 
@@ -40,6 +41,16 @@ export const initNotify = () => {
     if (initFlag) {
         return
     }
+    initFlag = true
+
+    if (attempt > 5) {
+        ElNotification({
+            title: '连接通知服务失败',
+            message: '请刷新页面重试',
+            type: 'error'
+        })
+        return
+    }
 
     const host = import.meta.env.VITE_NOTIFY_HOST ?? 'ws://127.0.0.1'
     const ws = new WebSocket(host)
@@ -48,7 +59,19 @@ export const initNotify = () => {
         console.info('Connect notify service success.')
     }
 
+    ws.onerror = (e) => {
+        console.warn('服务异常', e)
+    }
+
+    ws.onclose = () => {
+        console.warn('服务异常关闭')
+        initFlag = false
+        attempt++
+        initNotify()
+    }
+
     ws.onmessage = (e) => {
+        attempt = 0
         const message = parseData(JSON.parse(e.data))
 
         if (message.data.hasOwnProperty('clientId')) {
