@@ -13,7 +13,6 @@ import { PageEnum } from '@/enums/pageEnum'
 // 处理axios的钩子函数
 const axiosHooks: AxiosHooks = {
     requestInterceptorsHook(config) {
-        console.log(config)
         if (config.url !== 'adminapi/notify/link') NProgress.start()
         const { withToken, isParamsToData } = config.requestOptions
         const params = config.params || {}
