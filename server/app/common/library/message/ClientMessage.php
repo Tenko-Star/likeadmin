@@ -4,7 +4,7 @@ namespace app\common\library\message;
 
 class ClientMessage extends Message
 {
-    private string $clientId;
+    private string $clientId = '';
 
     public function setClientId(string $client): void
     {

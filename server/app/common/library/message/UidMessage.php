@@ -6,7 +6,7 @@ use think\facade\Cache;
 
 class UidMessage extends Message
 {
-    private array $clients;
+    private array $clients = [];
 
     public function setUid(int $uid): void
     {
