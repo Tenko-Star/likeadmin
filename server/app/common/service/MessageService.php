@@ -46,7 +46,7 @@ class MessageService
      */
     public function login(string $clientId, string $uid): void
     {
-        if (!$this->isClientOnline($clientId)) {
+        if ($this->isClientOnline($clientId)) {
             return;
         }
 
