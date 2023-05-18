@@ -113,4 +113,16 @@ class Admin extends BaseModel
         return empty($value) ? FileService::getFileUrl(config('project.default_image.admin_avatar')) : FileService::getFileUrl(trim($value, '/'));
     }
 
+    public function toSource(): array
+    {
+        if ($this->isEmpty()) {
+            throw new \Exception('User model is empty');
+        }
+
+        return [
+            'id' => $this->getData('id'),
+            'nickname' => $this->getData('nickname'),
+            'avatar' => $this->getAttr('avatar')
+        ];
+    }
 }

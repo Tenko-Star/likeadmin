@@ -3,7 +3,7 @@
         <div class="lg:flex">
             <el-card class="!border-none mb-4 lg:mr-4 lg:w-[350px]" shadow="never">
                 <template #header>
-                    <span class="card-title">版本信息</span>
+                    <span class="card-title" @click="ping">版本信息</span>
                 </template>
                 <div>
                     <div class="flex leading-9">
@@ -138,6 +138,10 @@
 <script lang="ts" setup name="workbench">
 import { getWorkbench } from '@/api/app'
 import vCharts from 'vue-echarts'
+import { useNotify } from '@/hooks/useNotify'
+import type { SystemType, WebsocketData } from '@/utils/websocket/types'
+import { ElNotification } from 'element-plus'
+import { ping } from '@/api/notify'
 // 表单数据
 const workbenchData: any = reactive({
     version: {
@@ -211,8 +215,22 @@ const getData = () => {
         })
 }
 
+const removeListener = useNotify((data) => {
+    if (data.sendUserId === 'system') {
+        const msg = data as WebsocketData<SystemType>
+        ElNotification({
+            title: '收到一条新信息',
+            message: msg.msg
+        })
+    }
+})
+
 onMounted(() => {
     getData()
+})
+
+onUnmounted(() => {
+    removeListener()
 })
 </script>
 
