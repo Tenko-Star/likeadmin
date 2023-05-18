@@ -20,14 +20,26 @@ use TencentCloud\Common\AbstractModel;
 /**
  * ListRuntimesMC请求参数结构体
  *
-
+ * @method integer getRuntimeClass() 获取环境运行类型：0:运行时类型、1:api类型
+ * @method void setRuntimeClass(integer $RuntimeClass) 设置环境运行类型：0:运行时类型、1:api类型
+ * @method integer getPlanType() 获取计划类型：0-pro 1-lite
+ * @method void setPlanType(integer $PlanType) 设置计划类型：0-pro 1-lite
  */
 class ListRuntimesMCRequest extends AbstractModel
 {
-
+    /**
+     * @var integer 环境运行类型：0:运行时类型、1:api类型
+     */
+    public $RuntimeClass;
 
     /**
+     * @var integer 计划类型：0-pro 1-lite
+     */
+    public $PlanType;
 
+    /**
+     * @param integer $RuntimeClass 环境运行类型：0:运行时类型、1:api类型
+     * @param integer $PlanType 计划类型：0-pro 1-lite
      */
     function __construct()
     {
@@ -42,6 +54,12 @@ class ListRuntimesMCRequest extends AbstractModel
         if ($param === null) {
             return;
         }
+        if (array_key_exists("RuntimeClass",$param) and $param["RuntimeClass"] !== null) {
+            $this->RuntimeClass = $param["RuntimeClass"];
+        }
 
+        if (array_key_exists("PlanType",$param) and $param["PlanType"] !== null) {
+            $this->PlanType = $param["PlanType"];
+        }
     }
 }

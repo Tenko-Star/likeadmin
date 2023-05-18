@@ -22,8 +22,8 @@ use TencentCloud\Common\AbstractModel;
  *
  * @method string getBatchTaskName() 获取跑批任务名称，不超过60个字符，仅支持中英文、数字、下划线"_"、短横"-"，只能以中英文、数字开头
  * @method void setBatchTaskName(string $BatchTaskName) 设置跑批任务名称，不超过60个字符，仅支持中英文、数字、下划线"_"、短横"-"，只能以中英文、数字开头
- * @method string getChargeType() 获取计费模式，eg：PREPAID预付费，即包年包月；POSTPAID_BY_HOUR按小时后付费
- * @method void setChargeType(string $ChargeType) 设置计费模式，eg：PREPAID预付费，即包年包月；POSTPAID_BY_HOUR按小时后付费
+ * @method string getChargeType() 获取计费模式，eg：PREPAID 包年包月；POSTPAID_BY_HOUR 按量计费
+ * @method void setChargeType(string $ChargeType) 设置计费模式，eg：PREPAID 包年包月；POSTPAID_BY_HOUR 按量计费
  * @method ResourceConfigInfo getResourceConfigInfo() 获取资源配置
  * @method void setResourceConfigInfo(ResourceConfigInfo $ResourceConfigInfo) 设置资源配置
  * @method array getOutputs() 获取结果输出
@@ -34,8 +34,8 @@ use TencentCloud\Common\AbstractModel;
  * @method void setJobType(integer $JobType) 设置工作类型 1:单次 2:周期
  * @method CronInfo getCronInfo() 获取任务周期描述
  * @method void setCronInfo(CronInfo $CronInfo) 设置任务周期描述
- * @method string getResourceGroupId() 获取预付费专用资源组
- * @method void setResourceGroupId(string $ResourceGroupId) 设置预付费专用资源组
+ * @method string getResourceGroupId() 获取包年包月资源组ID
+ * @method void setResourceGroupId(string $ResourceGroupId) 设置包年包月资源组ID
  * @method array getTags() 获取标签配置
  * @method void setTags(array $Tags) 设置标签配置
  * @method ModelInfo getModelInfo() 获取服务对应的模型信息，有模型文件时需要填写
@@ -56,6 +56,8 @@ use TencentCloud\Common\AbstractModel;
  * @method void setSubnetId(string $SubnetId) 设置子网Id
  * @method string getRemark() 获取备注
  * @method void setRemark(string $Remark) 设置备注
+ * @method string getCallbackUrl() 获取任务执行结果回调URL，仅支持http和https。回调格式&内容详见: [TI-ONE 接口回调说明](https://cloud.tencent.com/document/product/851/84292)
+ * @method void setCallbackUrl(string $CallbackUrl) 设置任务执行结果回调URL，仅支持http和https。回调格式&内容详见: [TI-ONE 接口回调说明](https://cloud.tencent.com/document/product/851/84292)
  */
 class CreateBatchTaskRequest extends AbstractModel
 {
@@ -65,7 +67,7 @@ class CreateBatchTaskRequest extends AbstractModel
     public $BatchTaskName;
 
     /**
-     * @var string 计费模式，eg：PREPAID预付费，即包年包月；POSTPAID_BY_HOUR按小时后付费
+     * @var string 计费模式，eg：PREPAID 包年包月；POSTPAID_BY_HOUR 按量计费
      */
     public $ChargeType;
 
@@ -95,7 +97,7 @@ class CreateBatchTaskRequest extends AbstractModel
     public $CronInfo;
 
     /**
-     * @var string 预付费专用资源组
+     * @var string 包年包月资源组ID
      */
     public $ResourceGroupId;
 
@@ -150,14 +152,19 @@ class CreateBatchTaskRequest extends AbstractModel
     public $Remark;
 
     /**
+     * @var string 任务执行结果回调URL，仅支持http和https。回调格式&内容详见: [TI-ONE 接口回调说明](https://cloud.tencent.com/document/product/851/84292)
+     */
+    public $CallbackUrl;
+
+    /**
      * @param string $BatchTaskName 跑批任务名称，不超过60个字符，仅支持中英文、数字、下划线"_"、短横"-"，只能以中英文、数字开头
-     * @param string $ChargeType 计费模式，eg：PREPAID预付费，即包年包月；POSTPAID_BY_HOUR按小时后付费
+     * @param string $ChargeType 计费模式，eg：PREPAID 包年包月；POSTPAID_BY_HOUR 按量计费
      * @param ResourceConfigInfo $ResourceConfigInfo 资源配置
      * @param array $Outputs 结果输出
      * @param boolean $LogEnable 是否上报日志
      * @param integer $JobType 工作类型 1:单次 2:周期
      * @param CronInfo $CronInfo 任务周期描述
-     * @param string $ResourceGroupId 预付费专用资源组
+     * @param string $ResourceGroupId 包年包月资源组ID
      * @param array $Tags 标签配置
      * @param ModelInfo $ModelInfo 服务对应的模型信息，有模型文件时需要填写
      * @param ImageInfo $ImageInfo 自定义镜像信息
@@ -168,6 +175,7 @@ class CreateBatchTaskRequest extends AbstractModel
      * @param string $VpcId VPC Id
      * @param string $SubnetId 子网Id
      * @param string $Remark 备注
+     * @param string $CallbackUrl 任务执行结果回调URL，仅支持http和https。回调格式&内容详见: [TI-ONE 接口回调说明](https://cloud.tencent.com/document/product/851/84292)
      */
     function __construct()
     {
@@ -273,6 +281,10 @@ class CreateBatchTaskRequest extends AbstractModel
 
         if (array_key_exists("Remark",$param) and $param["Remark"] !== null) {
             $this->Remark = $param["Remark"];
+        }
+
+        if (array_key_exists("CallbackUrl",$param) and $param["CallbackUrl"] !== null) {
+            $this->CallbackUrl = $param["CallbackUrl"];
         }
     }
 }
