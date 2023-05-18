@@ -158,11 +158,17 @@ class MessageService
      * @param string $clientId
      * @return void
      */
-    public function heartBeat(string $clientId): void
+    public function heartBeat(string $clientId): bool
     {
+        if (!$this->isClientOnline($clientId)) {
+            return false;
+        }
+
         $key = 'msg:hb:' . $clientId;
         $ttl = $this->config['heart_beat_ttl'] ?? 60;
         Cache::set($key, time(), $ttl);
+
+        return true;
     }
 
     /**
