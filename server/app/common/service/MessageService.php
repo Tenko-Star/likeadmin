@@ -46,13 +46,18 @@ class MessageService
      */
     public function login(string $clientId, string $uid): void
     {
-        // todo 检查是否存在
+        if (!$this->isClientOnline($clientId)) {
+            return;
+        }
+
         $now = time();
 
         // 心跳包逻辑
         $key = 'msg:hb:' . $clientId;
-        Cache::set($key, $now, 60);
-        Queue::later(120, HeartBeat::class, ['clientId' => $clientId], $this->config['queue'] ?: null);
+        $hbTTL = $this->config['heart_beat_ttl'] ?? 60;
+        $timeout = $this->config['connect_timeout'] ?? 120;
+        Cache::set($key, $now, $hbTTL);
+        Queue::later($timeout, HeartBeat::class, ['clientId' => $clientId], $this->config['queue'] ?: null);
 
         // 客户端信息
         $clientKey = 'msg:info:' . $clientId;
@@ -156,7 +161,8 @@ class MessageService
     public function heartBeat(string $clientId): void
     {
         $key = 'msg:hb:' . $clientId;
-        Cache::set($key, time(), 60);
+        $ttl = $this->config['heart_beat_ttl'] ?? 60;
+        Cache::set($key, time(), $ttl);
     }
 
     /**
@@ -181,8 +187,24 @@ class MessageService
      */
     public function isClientOnline(string $clientId): bool
     {
-        $key = 'msg:hb:' . $clientId;
-        return Cache::has($key);
+        $hbKey = 'msg:hb:' . $clientId;
+        if (Cache::has($hbKey)) {
+            // hot online
+            return true;
+        }
+
+        $infoKey = 'msg:info:' . $clientId;
+        $info = Cache::get($infoKey, []);
+        if (!empty($info) && !empty($info['uid'])) {
+            $uidKey = 'msg:clients:' . $info['uid'];
+            $clientIds = Cache::get($uidKey, []);
+            if (in_array($clientId, $clientIds)) {
+                // maybe online
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function parseHost(): string
@@ -203,6 +225,12 @@ class MessageService
      */
     public static function log(string $msg, ?array $data = null, string $type = LogTypeEnum::INFO): void
     {
+        $debug = Config::get('message.debug', false);
+
+        if ($type !== LogTypeEnum::DEBUG || !$debug) {
+            return;
+        }
+
         Log::write(
             sprintf("Message log\n[%s] %s\n[DATA] %s\n", strtoupper($type), $msg, json_encode($data)),
             'message'
