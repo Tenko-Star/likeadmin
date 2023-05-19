@@ -6,6 +6,7 @@ import router, { filterAsyncRoutes } from '@/router'
 import { TOKEN_KEY } from '@/enums/cacheEnums'
 import { PageEnum } from '@/enums/pageEnum'
 import { clearAuthInfo, getToken } from '@/utils/auth'
+import { closeNotify } from '@/utils/websocket/util'
 export interface UserState {
     token: string
     userInfo: Record<string, any>
@@ -59,6 +60,9 @@ const useUserStore = defineStore({
                     })
                     .catch((error) => {
                         reject(error)
+                    })
+                    .finally(() => {
+                        closeNotify()
                     })
             })
         },

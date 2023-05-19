@@ -38,6 +38,11 @@ export const getClientId = (): string => {
     return WsInfo.clientId
 }
 
+export const closeNotify = (code = 0, reason?: string) => {
+    console.info('Disconnect notify service.')
+    WsInfo.connection?.close(code, reason)
+}
+
 export const initNotify = () => {
     if (initFlag) {
         return
