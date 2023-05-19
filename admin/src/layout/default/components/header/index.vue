@@ -13,6 +13,9 @@
                 </div>
             </div>
             <div class="flex">
+                <div class="navbar-item">
+                    <message-drop-down />
+                </div>
                 <div class="navbar-item" v-if="!isMobile">
                     <full-screen />
                 </div>
@@ -35,6 +38,7 @@ import Refresh from './refresh.vue'
 import Breadcrumb from './breadcrumb.vue'
 import FullScreen from './full-screen.vue'
 import UserDropDown from './user-drop-down.vue'
+import MessageDropDown from './message-drop-down.vue'
 import Setting from '../setting/index.vue'
 import MultipleTabs from './multiple-tabs.vue'
 

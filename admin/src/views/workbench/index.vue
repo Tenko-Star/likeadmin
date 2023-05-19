@@ -139,9 +139,8 @@
 import { getWorkbench } from '@/api/app'
 import vCharts from 'vue-echarts'
 import { useNotify } from '@/hooks/useNotify'
-import type { SystemType, WebsocketData } from '@/utils/websocket/types'
-import { ElNotification } from 'element-plus'
 import { ping } from '@/api/notify'
+import { useMessage } from '@/hooks/useMessage'
 // 表单数据
 const workbenchData: any = reactive({
     version: {
@@ -215,11 +214,16 @@ const getData = () => {
         })
 }
 
+const { addMessage } = useMessage()
+
 const removeListener = useNotify((data) => {
     if (data.sendUserId === 'system' && data.msg === 'pong') {
-        const msg = data as WebsocketData<SystemType>
-        ElNotification({
-            title: 'PONG'
+        addMessage({
+            title: 'PONG',
+            content: 'return ping',
+            handler: () => {
+                console.log('ping', data)
+            }
         })
     }
 })
