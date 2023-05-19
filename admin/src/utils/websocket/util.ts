@@ -2,6 +2,7 @@ import type { CommonWebsocketData } from '@/utils/websocket/ws'
 import { parseData } from '@/utils/websocket/ws'
 import { heartbeat, login } from '@/api/notify'
 import { ElNotification } from 'element-plus'
+import { getNonDuplicateID } from '@/utils/util'
 
 let initFlag = false
 let attempt = 1
@@ -21,7 +22,7 @@ const WsInfo: WebsocketInfo = {
 }
 
 export const addNotifyHandler = (handler: NotifyHandler): string => {
-    const key = crypto.randomUUID()
+    const key = getNonDuplicateID()
     WsInfo.handlers[key] = handler
 
     return key

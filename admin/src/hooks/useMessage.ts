@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { ElNotification } from 'element-plus'
+import { getNonDuplicateID } from '@/utils/util'
 
 export interface MessageStruct {
     id: string
@@ -21,13 +22,13 @@ const showMsgBox = ref<boolean>(false)
 
 export function loadMessage(ms: MessageStruct[]) {
     ms.forEach((msg) => {
-        messages.set(crypto.randomUUID(), msg)
+        messages.set(getNonDuplicateID(), msg)
     })
     count.value = messages.size
 }
 
 function addMessage(config: MessageConfig) {
-    const id = crypto.randomUUID()
+    const id = getNonDuplicateID()
     const showNotification = config.showNotification ?? true
     messages.set(id, {
         id,
