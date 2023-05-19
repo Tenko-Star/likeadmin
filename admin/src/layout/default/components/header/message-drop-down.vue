@@ -28,11 +28,7 @@ const removeOne = (id: string) => {
 </script>
 
 <template>
-    <div
-        class="flex items-center justify-center"
-        style="width: 35px; cursor: pointer"
-        @click="showMsgBox = true"
-    >
+    <div class="flex items-center justify-center" style="width: 35px; cursor: pointer">
         <el-badge class="badge" :value="count" :max="9" :hidden="count < 1">
             <el-icon :size="16">
                 <Bell />

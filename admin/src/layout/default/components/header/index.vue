@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="flex">
-                <div class="navbar-item">
+                <div class="navbar-item" @click="showMsgBox = true">
                     <message-drop-down />
                 </div>
                 <div class="navbar-item" v-if="!isMobile">
@@ -43,9 +43,11 @@ import Setting from '../setting/index.vue'
 import MultipleTabs from './multiple-tabs.vue'
 
 import useSettingStore from '@/stores/modules/setting'
+import { useMessage } from '@/hooks/useMessage'
 const appStore = useAppStore()
 const isMobile = computed(() => appStore.isMobile)
 const settingStore = useSettingStore()
+const { showMsgBox } = useMessage()
 </script>
 
 <style lang="scss">
@@ -54,6 +56,7 @@ const settingStore = useSettingStore()
     @apply flex px-2 bg-body;
     .navbar-item {
         @apply h-full  flex justify-center items-center  hover:bg-page;
+        cursor: pointer;
     }
 }
 </style>
