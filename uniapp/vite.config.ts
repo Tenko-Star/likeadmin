@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import uni from '@dcloudio/vite-plugin-uni'
 import tailwindcss from 'tailwindcss'
+// @ts-ignore
 import autoprefixer from 'autoprefixer'
 import postcssRemToResponsivePixel from 'postcss-rem-to-responsive-pixel'
 import postcssWeappTailwindcssRename from 'weapp-tailwindcss-webpack-plugin/postcss'
