@@ -138,9 +138,7 @@
 <script lang="ts" setup name="workbench">
 import { getWorkbench } from '@/api/app'
 import vCharts from 'vue-echarts'
-import { useNotify } from '@/hooks/useNotify'
 import { ping } from '@/api/notify'
-import { useMessage } from '@/hooks/useMessage'
 // 表单数据
 const workbenchData: any = reactive({
     version: {
@@ -214,26 +212,8 @@ const getData = () => {
         })
 }
 
-const { addMessage } = useMessage()
-
-const removeListener = useNotify((data) => {
-    if (data.sendUserId === 'system' && data.msg === 'pong') {
-        addMessage({
-            title: 'PONG',
-            content: 'return ping',
-            handler: () => {
-                console.log('ping', data)
-            }
-        })
-    }
-})
-
 onMounted(() => {
     getData()
-})
-
-onUnmounted(() => {
-    removeListener()
 })
 </script>
 
