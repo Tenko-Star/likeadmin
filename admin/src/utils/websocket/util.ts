@@ -68,7 +68,9 @@ export const initNotify = () => {
         console.warn('服务异常关闭')
         initFlag = false
         attempt++
-        initNotify()
+        setTimeout(() => {
+            initNotify()
+        }, 5000)
     }
 
     ws.onmessage = (e) => {
