@@ -172,5 +172,17 @@ class User extends BaseModel
         return $sn;
     }
 
+    public function toSource(): array
+    {
+        if ($this->isEmpty()) {
+            throw new \Exception('User model is empty');
+        }
 
+        return [
+            'id' => $this->getData('id'),
+            'nickname' => $this->getData('nickname'),
+            'avatar' => $this->getAttr('avatar'),
+            'sn' => $this->getData('sn')
+        ];
+    }
 }

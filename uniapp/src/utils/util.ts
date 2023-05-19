@@ -151,3 +151,9 @@ export function series(...task: Array<(_arg: any) => any>) {
         })
     }
 }
+
+export const getNonDuplicateID = (length = 8) => {
+    let idStr = Date.now().toString(36)
+    idStr += Math.random().toString(36).substring(3, length)
+    return idStr
+}

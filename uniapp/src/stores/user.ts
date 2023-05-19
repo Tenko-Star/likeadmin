@@ -2,6 +2,7 @@ import { getUserCenter } from '@/api/user'
 import { TOKEN_KEY } from '@/enums/constantEnums'
 import cache from '@/utils/cache'
 import { defineStore } from 'pinia'
+import { closeNotify, initNotify } from '@/utils/websocket/util'
 
 interface UserSate {
     userInfo: Record<string, any>
@@ -28,11 +29,13 @@ export const useUserStore = defineStore({
         login(token: string) {
             this.token = token
             cache.set(TOKEN_KEY, token)
+            initNotify()
         },
         logout() {
             this.token = ''
             this.userInfo = {}
             cache.remove(TOKEN_KEY)
+            closeNotify(-1, 'user logout')
         }
     }
 })
