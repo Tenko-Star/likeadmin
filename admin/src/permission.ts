@@ -12,7 +12,7 @@ import { PageEnum } from './enums/pageEnum'
 import useTabsStore from './stores/modules/multipleTabs'
 import { clearAuthInfo } from './utils/auth'
 import config from './config'
-import { initNotify } from '@/utils/websocket/util'
+import { startNotify } from '@/utils/websocket/util'
 
 // NProgress配置
 NProgress.configure({ showSpinner: false })
@@ -33,7 +33,7 @@ router.beforeEach(async (to, from, next) => {
     } else if (userStore.token) {
         // 初始化通知服务 (Websocket)
         // 登陆后才能初始化
-        initNotify()
+        startNotify()
         // 获取用户信息
         const hasGetUserInfo = Object.keys(userStore.userInfo).length !== 0
         if (hasGetUserInfo) {

@@ -5,6 +5,9 @@
  */
 
 return [
+    // 全局开关
+    'enable' => false,
+
     // debug
     'debug' => true,
 

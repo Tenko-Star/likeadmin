@@ -29,6 +29,7 @@ use app\common\model\dept\Jobs;
 use app\common\model\dict\DictData;
 use app\common\model\dict\DictType;
 use app\common\service\{FileService, ConfigService};
+use think\facade\Config;
 
 /**
  * 配置类逻辑层
@@ -60,6 +61,8 @@ class ConfigLogic
 
             // 版权信息
             'copyright_config' => ConfigService::get('copyright', 'config', []),
+
+            'message' => Config::get('message.enable', false)
         ];
         return $config;
     }

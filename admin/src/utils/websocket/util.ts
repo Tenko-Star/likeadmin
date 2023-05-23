@@ -3,7 +3,9 @@ import { parseData } from '@/utils/websocket/ws'
 import { heartbeat, login } from '@/api/notify'
 import { ElNotification } from 'element-plus'
 import { getNonDuplicateID } from '@/utils/util'
+import useAppStore from '@/stores/modules/app'
 
+let enable = false
 let initFlag = false
 let attempt = 1
 
@@ -44,7 +46,15 @@ export const closeNotify = (code = 0, reason?: string) => {
 }
 
 export const initNotify = () => {
-    if (initFlag) {
+    const appStore = useAppStore()
+
+    if (appStore.config.message && typeof appStore.config.message === 'boolean') {
+        enable = appStore.config.message
+    }
+}
+
+export const startNotify = () => {
+    if (initFlag === true || enable === false) {
         return
     }
     initFlag = true
@@ -74,7 +84,7 @@ export const initNotify = () => {
         initFlag = false
         attempt++
         setTimeout(() => {
-            initNotify()
+            startNotify()
         }, 5000)
     }
 
