@@ -154,7 +154,8 @@ class OfficialAccountReplyLogic extends BaseLogic
 
         // 确认此次GET请求来自微信服务器，原样返回echostr参数内容，接入生效，成为开发者成功
         if (isset($_GET['echostr'])) {
-            return $server->serve();
+            echo $_GET['echostr'];
+            exit;
         }
 
         // 事件
