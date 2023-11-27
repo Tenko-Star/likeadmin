@@ -54,7 +54,7 @@ export const initNotify = () => {
 }
 
 export const startNotify = () => {
-    if (initFlag === true || enable === false) {
+    if (initFlag || !enable) {
         return
     }
     initFlag = true
